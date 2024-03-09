@@ -13,8 +13,9 @@ function Home() {
       <HeroSection/>
       <BrandLogo/>
       <PopularStyles/>
-      <ProductList/>
+      <ProductList title='Hot New Releases'/>
       <Banner/>
+      <ProductList title='Best Sellers' isBestseller={true}/>
     </>
   )
 }
