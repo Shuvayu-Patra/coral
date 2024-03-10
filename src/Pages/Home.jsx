@@ -5,6 +5,7 @@ import BrandLogo from '../Components/BrandLogo'
 import PopularStyles from '../Components/PopularStyles'
 import ProductList from '../Components/ProductList'
 import Banner from '../Components/Banner'
+import Footer from '../Components/Footer'
 
 function Home() {
   return (
@@ -16,6 +17,7 @@ function Home() {
       <ProductList title='Hot New Releases'/>
       <Banner/>
       <ProductList title='Best Sellers' isBestseller={true}/>
+      <Footer/>
     </>
   )
 }

@@ -12,7 +12,7 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import coral from "../Assets/coral.png";
+import coral from "../Assets/coral.svg";
 import { FaBagShopping, FaUser } from "react-icons/fa6";
 import { CgMenuMotion } from "react-icons/cg";
 const category = [

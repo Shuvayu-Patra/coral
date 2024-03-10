@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
@@ -100,32 +101,40 @@ function ProductList({ title = "", isBestseller = false }) {
         gap={6}
         p={6}
       > */}
-      <SimpleGrid minChildWidth='120px' spacing='1rem' p={2}>
+      <SimpleGrid minChildWidth="120px" spacing="1rem" p={2}>
         {products &&
           products.map((product) => {
             return (
               <Card key={product.id}>
                 <CardBody>
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    borderRadius="lg"
-                    aspectRatio={1 / 1}
-                  />
-                  <Stack mt="6" spacing="3">
-                    <Heading fontSize={["sm","md"]} fontFamily={"'Roboto','sans-serif'"}>
-                      {product.title}
-                    </Heading>
+                  <VStack h={'100%'} justifyContent={'space-around'} align={'center'}>
+                    <Image
+                      src={product.image}
+                      alt={product.title}
+                      borderRadius="lg"
+                      aspectRatio={1 / 1}
+                    />
+                    <Stack mt="6" spacing="3">
+                      <Heading
+                        fontSize={["sm", "md"]}
+                        fontFamily={"'Roboto','sans-serif'"}
+                      >
+                        {product.title}
+                      </Heading>
 
-                    <HStack justifyContent={"space-between"}>
-                      <Text textTransform={"capitalize"}  fontSize={["sm","md"]}>
-                        {product.category}
-                      </Text>
-                      <Text color="blue.600" fontSize={["xl","2xl"]}>
-                        ${product.price}
-                      </Text>
-                    </HStack>
-                  </Stack>
+                      <HStack justifyContent={"space-between"}>
+                        <Text
+                          textTransform={"capitalize"}
+                          fontSize={["sm", "md"]}
+                        >
+                          {product.category}
+                        </Text>
+                        <Text color="blue.600" fontSize={["xl", "2xl"]}>
+                          ${product.price}
+                        </Text>
+                      </HStack>
+                    </Stack>
+                  </VStack>
                 </CardBody>
               </Card>
             );
