@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { FaFilter } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 function ProductList({ title = "", isBestseller = false }) {
   const [products, setProducts] = useState([]);
@@ -105,38 +106,44 @@ function ProductList({ title = "", isBestseller = false }) {
         {products &&
           products.map((product) => {
             return (
-              <Card key={product.id}>
-                <CardBody>
-                  <VStack h={'100%'} justifyContent={'space-around'} align={'center'}>
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      borderRadius="lg"
-                      aspectRatio={1 / 1}
-                    />
-                    <Stack mt="6" spacing="3">
-                      <Heading
-                        fontSize={["sm", "md"]}
-                        fontFamily={"'Roboto','sans-serif'"}
-                      >
-                        {product.title}
-                      </Heading>
-
-                      <HStack justifyContent={"space-between"}>
-                        <Text
-                          textTransform={"capitalize"}
+              <Link to={`/product/${product.id}`} key={product.id}>
+                <Card key={product.id}>
+                  <CardBody>
+                    <VStack
+                      h={"100%"}
+                      justifyContent={"space-around"}
+                      align={"center"}
+                    >
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        borderRadius="lg"
+                        aspectRatio={1 / 1}
+                      />
+                      <Stack mt="6" spacing="3">
+                        <Heading
                           fontSize={["sm", "md"]}
+                          fontFamily={"'Roboto','sans-serif'"}
                         >
-                          {product.category}
-                        </Text>
-                        <Text color="blue.600" fontSize={["xl", "2xl"]}>
-                          ${product.price}
-                        </Text>
-                      </HStack>
-                    </Stack>
-                  </VStack>
-                </CardBody>
-              </Card>
+                          {product.title}
+                        </Heading>
+
+                        <HStack justifyContent={"space-between"}>
+                          <Text
+                            textTransform={"capitalize"}
+                            fontSize={["sm", "md"]}
+                          >
+                            {product.category}
+                          </Text>
+                          <Text color="blue.600" fontSize={["xl", "2xl"]}>
+                            ${product.price}
+                          </Text>
+                        </HStack>
+                      </Stack>
+                    </VStack>
+                  </CardBody>
+                </Card>
+              </Link>
             );
           })}
       </SimpleGrid>
