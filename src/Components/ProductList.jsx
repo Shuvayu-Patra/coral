@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardBody,
@@ -7,6 +8,7 @@ import {
   Image,
   Select,
   SimpleGrid,
+  Spinner,
   Stack,
   Text,
   VStack,
@@ -20,6 +22,7 @@ function ProductList({ title = "", isBestseller = false }) {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("men's clothing");
   const [sortBy, setSortBy] = useState("desc");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -28,6 +31,7 @@ function ProductList({ title = "", isBestseller = false }) {
       )
       .then((res) => {
         setProducts(res.data);
+        setLoading(false);
       });
   }, [category, sortBy]);
 
@@ -103,11 +107,21 @@ function ProductList({ title = "", isBestseller = false }) {
         p={6}
       > */}
       <SimpleGrid minChildWidth="120px" spacing="1rem" p={2}>
-        {products &&
+        {loading ? (
+          <Box display={'flex'} alignItems={"center"} justifyContent={"center"} minH={"72vh"}>
+            <Spinner
+              thickness="3px"
+              speed="0.65s"
+              // emptyColor="gray.200"
+              color="red.500"
+              size="xl"
+            />
+          </Box>
+        ) : (
           products.map((product) => {
             return (
-              <Link to={`/product/${product.id}`} key={product.id}>
-                <Card key={product.id}>
+              <Link to={`/product/${product?.id}`} key={product?.id}>
+                <Card key={product?.id}>
                   <CardBody>
                     <VStack
                       h={"100%"}
@@ -115,8 +129,8 @@ function ProductList({ title = "", isBestseller = false }) {
                       align={"center"}
                     >
                       <Image
-                        src={product.image}
-                        alt={product.title}
+                        src={product?.image}
+                        alt={product?.title}
                         borderRadius="lg"
                         aspectRatio={1 / 1}
                       />
@@ -125,7 +139,7 @@ function ProductList({ title = "", isBestseller = false }) {
                           fontSize={["sm", "md"]}
                           fontFamily={"'Roboto','sans-serif'"}
                         >
-                          {product.title}
+                          {product?.title}
                         </Heading>
 
                         <HStack justifyContent={"space-between"}>
@@ -133,10 +147,10 @@ function ProductList({ title = "", isBestseller = false }) {
                             textTransform={"capitalize"}
                             fontSize={["sm", "md"]}
                           >
-                            {product.category}
+                            {product?.category}
                           </Text>
                           <Text color="blue.600" fontSize={["xl", "2xl"]}>
-                            ${product.price}
+                            ${product?.price}
                           </Text>
                         </HStack>
                       </Stack>
@@ -145,7 +159,8 @@ function ProductList({ title = "", isBestseller = false }) {
                 </Card>
               </Link>
             );
-          })}
+          })
+        )}
       </SimpleGrid>
       {/* </Grid> */}
     </>

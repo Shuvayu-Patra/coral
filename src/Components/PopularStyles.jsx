@@ -1,4 +1,10 @@
-import { Box, Card, Grid, GridItem, Image, Text } from "@chakra-ui/react";
+import {
+  Card,
+  Grid,
+  GridItem,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -20,7 +26,7 @@ function PopularStyles() {
         gap={10}
         px={[5, 40]}
         py={[5, 20]}
-          pos={'relative'}
+        pos={"relative"}
       >
         <GridItem
           rowSpan={[1, 2]}
@@ -34,11 +40,11 @@ function PopularStyles() {
             fontWeight={600}
             textTransform={"uppercase"}
             transform={["", "rotate(-90deg)"]}
-            pos={['', 'absolute']}
-            left={'-5rem'}
-            top={'47%'}
-            fontSize={['1rem', '1.5rem']}
-            textAlign={'center'}
+            pos={["", "absolute"]}
+            left={"-5rem"}
+            top={"47%"}
+            fontSize={["1rem", "1.5rem"]}
+            textAlign={"center"}
             p={[5, 0]}
           >
             Explore new and popular styles
