@@ -1,6 +1,7 @@
-import { Box, Heading, Image, Stack, VStack } from "@chakra-ui/react";
+import { Badge, Box, Heading, Image, Stack, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import Rating from "../Components/Rating";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -16,7 +17,9 @@ export default function ProductDetails() {
           />
         </Box>
         <VStack>
-            <Heading></Heading>
+            <Heading>Shuvayu</Heading>
+            <Badge colorScheme='green'>Success</Badge>
+            <Rating rating={5}/>
         </VStack>
       </Stack>
     </>

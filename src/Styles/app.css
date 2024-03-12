@@ -1,2 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:wght@100;400&display=swap');
 
+#default-rating-control .rating-content {
+    width: 240px;
+    margin: 15px 0;
+    min-height: 75px;
+    padding:0;
+    text-align: center;
+}
+/* Represents the styles in touch mode */
+.e-bigger #default-rating-control .rating-content {
+    width: 330px;
+    margin: 15px 0;
+    min-height: 75px;
+    padding:0;
+    text-align: center;
+}
+#default-rating-control {
+    margin: 6% auto;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
