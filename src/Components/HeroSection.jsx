@@ -17,7 +17,7 @@ import Vector2 from "../Assets/Vector2.png";
 function HeroSection() {
   return (
     <>
-      <Box p={[4, 8]} bgGradient='linear(to-b, #ffffff, #f4f4f5)' pos={"relative"}>
+      <Box p={[4, 8]} bgGradient='linear(to-b, #ffffff, #f4f4f5)' pos={"relative"} >
         <Image src={Vector1} pos={"absolute"} left={0} bottom={'6rem'} />
         <Image src={Vector2} pos={"absolute"} right={0} bottom={'2rem'}/>
         <Stack

@@ -12,6 +12,8 @@ import React from "react";
 import coral from "../Assets/coral.svg";
 import { FaLinkedin } from "react-icons/fa";
 import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
 
 export default function Footer() {
   return (
@@ -22,7 +24,9 @@ export default function Footer() {
         py={8}
       >
         <GridItem colSpan={[2, 1]} p={[4, 8]}>
-          <Image src={coral} width={"50%"} my={1} mx={["auto", 0]} />
+          <HashLink smooth to="/#nav">
+            <Image src={coral} width={"50%"} my={1} mx={["auto", 0]} />
+          </HashLink>
           <Text
             fontSize="md"
             color="gray.400"

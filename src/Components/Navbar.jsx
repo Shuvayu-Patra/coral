@@ -15,6 +15,7 @@ import {
 import coral from "../Assets/coral.svg";
 import { FaBagShopping, FaUser } from "react-icons/fa6";
 import { CgMenuMotion } from "react-icons/cg";
+import { Link } from "react-router-dom";
 const category = [
   "electronics",
   "jewelery",
@@ -31,8 +32,11 @@ function Navbar() {
         justifyContent={["space-between", "space-evenly"]}
         alignItems={"center"}
         borderBottom={'1px solid #e3e3e3'}
+        id="nav"
       >
+        <Link to={"/"}>
         <Image src={coral} alt="logo" width={["10rem", "13rem"]} />
+        </Link>
         <HStack display={["none", "flex"]} gap={8} justifyContent={"center"}>
           {category.map((item, index) => (
             <Button
