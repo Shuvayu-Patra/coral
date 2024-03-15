@@ -7,7 +7,7 @@ const Rating = ({rating}) => {
     //   changeRating={this.changeRating}
       numberOfStars={5}
       name="rating"
-      starDimension="20px"
+      starDimension="16px"
       starSpacing="2px"
       starRatedDimension="20px"
       starRatedSpacing="2px"

@@ -31,23 +31,25 @@ function Navbar() {
         p={[2, 6]}
         justifyContent={["space-between", "space-evenly"]}
         alignItems={"center"}
-        borderBottom={'1px solid #e3e3e3'}
+        borderBottom={"1px solid #e3e3e3"}
         id="nav"
       >
         <Link to={"/"}>
-        <Image src={coral} alt="logo" width={["10rem", "13rem"]} />
+          <Image src={coral} alt="logo" width={["10rem", "13rem"]} />
         </Link>
         <HStack display={["none", "flex"]} gap={8} justifyContent={"center"}>
           {category.map((item, index) => (
-            <Button
-              variant={"unstyled"}
-              textTransform={"capitalize"}
-              key={index}
-            >
-              <Text fontWeight={100} fontFamily={"'Open Sans','sans-serif'"}>
-                {item}
-              </Text>
-            </Button>
+            <Link to={`category/${item}`} key={index}>
+              <Button
+                variant={"unstyled"}
+                textTransform={"capitalize"}
+                
+              >
+                <Text fontWeight={100} fontFamily={"'Open Sans','sans-serif'"}>
+                  {item}
+                </Text>
+              </Button>
+            </Link>
           ))}
         </HStack>
         <HStack
@@ -74,7 +76,7 @@ function Navbar() {
 
       <Drawer placement={"bottom"} onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent borderRadius={'1rem 1rem 0 0'}>
+        <DrawerContent borderRadius={"1rem 1rem 0 0"}>
           <DrawerHeader
             fontFamily={"'Roboto','sans-serif'"}
             borderBottomWidth="1px"
@@ -84,18 +86,20 @@ function Navbar() {
           <DrawerBody>
             <VStack gap={4} justifyContent={"center"} alignItems={"start"}>
               {category.map((item, index) => (
-                <Button
-                  variant={"unstyled"}
-                  textTransform={"capitalize"}
-                  key={index}
-                >
-                  <Text
-                    fontWeight={100}
-                    fontFamily={"'Open Sans','sans-serif'"}
+                <Link to={`category/${item}`} key={index}>
+                  <Button
+                    variant={"unstyled"}
+                    textTransform={"capitalize"}
+                    
                   >
-                    {item}
-                  </Text>
-                </Button>
+                    <Text
+                      fontWeight={100}
+                      fontFamily={"'Open Sans','sans-serif'"}
+                    >
+                      {item}
+                    </Text>
+                  </Button>
+                </Link>
               ))}
             </VStack>
           </DrawerBody>
