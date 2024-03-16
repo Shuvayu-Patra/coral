@@ -9,13 +9,14 @@ import Category from "./Pages/Category";
 function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/category/:category" element={<Category/>} />
-      </Routes>
-      <Footer />
+      
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/category/:category" element={<Category />} />
+        </Routes>
+        <Footer />
     </>
   );
 }

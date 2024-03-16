@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import Rating from "../Components/Rating";
 
-export default function Category({ title = "", categories = "" }) {
+export default function Category() {
   const { category } = useParams();
   const [product, setProduct] = useState([]);
   const [sortby, setSortby] = useState("desc");
@@ -28,20 +28,20 @@ export default function Category({ title = "", categories = "" }) {
     axios
       .get(
         `https://fakestoreapi.com/products/category/${
-          categories ? categories : category
+          category
         }?sort=${sortby}`
       )
       .then((res) => {
         setProduct(res.data);
         setLoading(false);
       });
-  }, [category, categories, sortby]);
+  }, [category, sortby]);
 
   return (
     <>
       <HStack justifyContent={"space-between"} p={[4, 8]}>
         <Heading textTransform={"capitalize"}>
-          {title ? title : category}
+          {category}
         </Heading>
         <Select
           variant={"outline"}
@@ -92,7 +92,7 @@ export default function Category({ title = "", categories = "" }) {
                       justifyContent={"space-between"}
                       align={"center"}
                       p={[2, 15]}
-                      minH={["58vh", "68vh"]}
+                      minH={["62vh", "68vh"]}
                     >
                       <Image
                         src={product?.image}
