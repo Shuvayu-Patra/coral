@@ -16,6 +16,7 @@ import coral from "../Assets/coral.svg";
 import { FaBagShopping, FaUser } from "react-icons/fa6";
 import { CgMenuMotion } from "react-icons/cg";
 import { Link } from "react-router-dom";
+import { useFirebase } from "../Context/Firebase";
 const category = [
   "electronics",
   "jewelery",
@@ -24,6 +25,8 @@ const category = [
 ];
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const firebase = useFirebase();
+  const signinWithGoogle = firebase.signinWithGoogle;
   return (
     <>
       <HStack
@@ -57,12 +60,17 @@ function Navbar() {
           justifySelf={"flex-end"}
           fontFamily={"'Roboto','sans-serif'"}
         >
-          <Button leftIcon={<FaUser size={20} />} variant="unstyled">
+          {/* <Button leftIcon={<FaUser size={20} />} variant="unstyled" onClick={signinWithGoogle}>
             <Text display={["none", "inline-block"]}>Account</Text>
           </Button>
           <Button leftIcon={<FaBagShopping size={20} />} variant="unstyled">
             <Text display={["none", "inline-block"]}>Shopping</Text>
+          </Button> */}
+          <Link to={  "/login" }>
+          <Button leftIcon={<FaUser size={20} />} variant="unstyled" >
+            <Text display={["none", "inline-block"]}>Sign up</Text>
           </Button>
+          </Link>
           <Button
             display={["inline-block", "none"]}
             leftIcon={<CgMenuMotion size={20} />}
