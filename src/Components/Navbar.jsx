@@ -13,7 +13,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import coral from "../Assets/coral.svg";
-import { FaBagShopping, FaUser } from "react-icons/fa6";
+import { FaUser } from "react-icons/fa6";
+import { MdLogout } from "react-icons/md";
 import { CgMenuMotion } from "react-icons/cg";
 import { Link } from "react-router-dom";
 import { useFirebase } from "../Context/Firebase";
@@ -26,7 +27,8 @@ const category = [
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firebase = useFirebase();
-  const signinWithGoogle = firebase.signinWithGoogle;
+  const loggedin = firebase.loggedin;
+  const logout = firebase.signOutUser;
   return (
     <>
       <HStack
@@ -43,11 +45,7 @@ function Navbar() {
         <HStack display={["none", "flex"]} gap={8} justifyContent={"center"}>
           {category.map((item, index) => (
             <Link to={`category/${item}`} key={index}>
-              <Button
-                variant={"unstyled"}
-                textTransform={"capitalize"}
-                
-              >
+              <Button variant={"unstyled"} textTransform={"capitalize"}>
                 <Text fontWeight={100} fontFamily={"'Open Sans','sans-serif'"}>
                   {item}
                 </Text>
@@ -60,17 +58,32 @@ function Navbar() {
           justifySelf={"flex-end"}
           fontFamily={"'Roboto','sans-serif'"}
         >
-          {/* <Button leftIcon={<FaUser size={20} />} variant="unstyled" onClick={signinWithGoogle}>
-            <Text display={["none", "inline-block"]}>Account</Text>
-          </Button>
-          <Button leftIcon={<FaBagShopping size={20} />} variant="unstyled">
-            <Text display={["none", "inline-block"]}>Shopping</Text>
-          </Button> */}
-          <Link to={  "/login" }>
-          <Button leftIcon={<FaUser size={20} />} variant="unstyled" >
-            <Text display={["none", "inline-block"]}>Sign up</Text>
-          </Button>
-          </Link>
+          {loggedin ? (
+            <>
+              <Link to={"/account"}>
+                <Button leftIcon={<FaUser size={20} />} variant="unstyled">
+                  <Text display={["none", "inline-block"]}>Account</Text>
+                </Button>
+              </Link>
+              <Button
+                leftIcon={<MdLogout size={20} color={"red"} />}
+                variant="unstyled"
+                alignItems={"center"}
+                justifyContent={"center"}
+                onClick={logout}
+              >
+                <Text color={"red"} display={["none", "inline-block"]}>
+                  Log out
+                </Text>
+              </Button>
+            </>
+          ) : (
+            <Link to={"/login"}>
+              <Button leftIcon={<FaUser size={20} />} variant="unstyled">
+                <Text display={["none", "inline-block"]}>Sign up</Text>
+              </Button>
+            </Link>
+          )}
           <Button
             display={["inline-block", "none"]}
             leftIcon={<CgMenuMotion size={20} />}
@@ -95,11 +108,7 @@ function Navbar() {
             <VStack gap={4} justifyContent={"center"} alignItems={"start"}>
               {category.map((item, index) => (
                 <Link to={`category/${item}`} key={index}>
-                  <Button
-                    variant={"unstyled"}
-                    textTransform={"capitalize"}
-                    
-                  >
+                  <Button variant={"unstyled"} textTransform={"capitalize"}>
                     <Text
                       fontWeight={100}
                       fontFamily={"'Open Sans','sans-serif'"}

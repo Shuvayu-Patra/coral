@@ -9,12 +9,11 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { FaFacebook, FaGithub, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import React, { useEffect, useState } from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
-import { db, useFirebase } from "../Context/Firebase";
-
-
+import { useFirebase } from "../Context/Firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   // const putData = () => {
@@ -39,6 +38,8 @@ export default function Login() {
   const signinUserWithEmailandPassword =
     firebase.signinUserWithEmailandPassword;
   const signinWithGoogle = firebase.signinWithGoogle;
+  const loggedin = firebase.loggedin;
+  const navigate = useNavigate();
   const HandleButtonClick = () => {
     if (signedup) {
       signupUserWithEmailandPassword(name, email, password);
@@ -46,6 +47,12 @@ export default function Login() {
       signinUserWithEmailandPassword(email, password);
     }
   };
+
+  useEffect(() => {
+    if (loggedin) {
+      navigate("/");
+    }
+  }, [loggedin, navigate]);
 
   return (
     <>
@@ -157,7 +164,7 @@ export default function Login() {
             >
               Login with Google
             </Button>
-            <Button
+            {/* <Button
               leftIcon={<FaFacebook />}
               colorScheme="teal"
               variant="outline"
@@ -167,8 +174,8 @@ export default function Login() {
               w={"full"}
             >
               Login with Facebook
-            </Button>
-            <Button
+            </Button> */}
+            {/* <Button
               leftIcon={<FaGithub />}
               colorScheme="teal"
               variant="outline"
@@ -178,7 +185,7 @@ export default function Login() {
               w={"full"}
             >
               Login with Github
-            </Button>
+            </Button> */}
             <Text
               fontFamily={'"Roboto","sans-serif"'}
               fontSize={["md", "xl"]}
@@ -196,6 +203,9 @@ export default function Login() {
               onClick={() => {
                 setSignedUp(!signedup);
                 window.scrollTo(0, 0);
+                setName("");
+                setEmail("");
+                setPassword("");
               }}
             >
               {signedup ? "Login" : "Sign Up"}

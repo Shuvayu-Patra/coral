@@ -1,14 +1,16 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { signOut } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
+import { useToast } from "@chakra-ui/react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDApISodCR2pMMi48tYdzzWof6_Zpgr390",
@@ -29,46 +31,137 @@ const firebaseContext = createContext(null);
 export const useFirebase = () => {
   return useContext(firebaseContext);
 };
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 export const FirebaseProvider = ({ children }) => {
-  const signinWithGoogle = () => {
-    signInWithPopup(auth, provider).catch((error) => {
-      console.log(error);
-    });
-  };
+  const toast = useToast();
+  const [user, setUser] = useState(null);
+  const [loggedin, setLoggedin] = useState(false);
+  const [name, setName] = useState("");
 
-  const signout = () => {
-    signOut(auth)
+  const signinWithGoogle = () => {
+    signInWithPopup(auth, provider)
       .then(() => {
-        // Sign-out successful.
+        toast({
+          title: "User Created Successfully.",
+          status: "success",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
       })
       .catch((error) => {
-        // An error happened.
+        toast({
+          title: capitalizeFirstLetter(
+            error.code.split("auth/")[1].split("-").join(" ")
+          ),
+          status: "error",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
+      });
+  };
+
+  const signOutUser = () => {
+    signOut(auth)
+      .then(() => {
+        toast({
+          title: "Signed out Successfully.",
+          status: "success",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: capitalizeFirstLetter(
+            error.code.split("auth/")[1].split("-").join(" ")
+          ),
+          status: "error",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
       });
   };
 
   const signupUserWithEmailandPassword = (name, email, password) => {
-    console.log(name, email, password);
-    createUserWithEmailAndPassword(auth, email, password).then((user)=>{
-      set(ref(db,  `users/${user?.uid}`), {
-        name: name,
-        email: email,
+    setName(name);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        toast({
+          title: "User Created Successfully.",
+          status: "success",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
       })
-    })
+      .catch((error) => {
+        toast({
+          title: capitalizeFirstLetter(
+            error.code.split("auth/")[1].split("-").join(" ")
+          ),
+          status: "error",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
+      });
   };
 
   const signinUserWithEmailandPassword = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password).then((user)=>{
-      console.log(user)
-    })
-  }
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        toast({
+          title: "Signed in Successfully.",
+          status: "success",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: capitalizeFirstLetter(
+            error.code.split("auth/")[1].split("-").join(" ")
+          ),
+          status: "error",
+          variant: "subtle",
+          position: "top",
+          isClosable: true,
+        });
+      });
+  };
 
   const value = {
     signinWithGoogle,
-    signOut,
+    signOutUser,
     signupUserWithEmailandPassword,
-    signinUserWithEmailandPassword
+    signinUserWithEmailandPassword,
+    user,
+    loggedin,
   };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        setLoggedin(true);
+        set(ref(db, `users/${user?.uid}`), {
+          name,
+          email: user?.email,
+        });
+      } else {
+        setUser(null);
+        setLoggedin(false);
+      }
+    });
+  }, [user, name]);
 
   return (
     <firebaseContext.Provider value={value}>
