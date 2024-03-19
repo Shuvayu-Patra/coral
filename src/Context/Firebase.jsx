@@ -9,22 +9,25 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { signOut } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref as dbRef, set } from "firebase/database";
 import { useToast } from "@chakra-ui/react";
+import { getStorage, ref as storageRef, uploadBytes } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDApISodCR2pMMi48tYdzzWof6_Zpgr390",
   authDomain: "coral-d9a1f.firebaseapp.com",
   projectId: "coral-d9a1f",
-  storageBucket: "coral-d9a1f.appspot.com",
   messagingSenderId: "115418950473",
   appId: "1:115418950473:web:1048eaada744709a024898",
   databaseURL: "https://coral-d9a1f-default-rtdb.firebaseio.com",
+  storageBucket: "gs://coral-d9a1f.appspot.com",
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 export const db = getDatabase(app);
+const storage = getStorage(app);
+
 
 const firebaseContext = createContext(null);
 
@@ -138,6 +141,13 @@ export const FirebaseProvider = ({ children }) => {
       });
   };
 
+  const uploadImage = (image) => {
+    const strgRef = storageRef(storage, 'users/profile photos');
+    uploadBytes(strgRef, image).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    });
+  }
+
   const value = {
     signinWithGoogle,
     signOutUser,
@@ -152,8 +162,8 @@ export const FirebaseProvider = ({ children }) => {
       if (user) {
         setUser(user);
         setLoggedin(true);
-        set(ref(db, `users/${user?.uid}`), {
-          name,
+        set(dbRef(db, `users/${user?.uid}`), {
+          name: name || user?.displayName,
           email: user?.email,
         });
       } else {
