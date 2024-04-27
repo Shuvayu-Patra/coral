@@ -9,9 +9,14 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { signOut } from "firebase/auth";
-import { getDatabase, ref as dbRef, set } from "firebase/database";
+import { getDatabase, ref as dbRef, set, update } from "firebase/database";
 import { useToast } from "@chakra-ui/react";
-import { getStorage, ref as storageRef, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDApISodCR2pMMi48tYdzzWof6_Zpgr390",
@@ -27,7 +32,6 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 export const db = getDatabase(app);
 const storage = getStorage(app);
-
 
 const firebaseContext = createContext(null);
 
@@ -46,13 +50,19 @@ export const FirebaseProvider = ({ children }) => {
 
   const signinWithGoogle = () => {
     signInWithPopup(auth, provider)
-      .then(() => {
-        toast({
-          title: "User Created Successfully.",
-          status: "success",
-          variant: "subtle",
-          position: "top",
-          isClosable: true,
+      .then((result) => {
+        const u = result.user;
+        update(dbRef(db, `users/${u?.uid}`), {
+          name: u?.displayName,
+          email: u?.email,
+        }).then(() => {
+          toast({
+            title: "User Created Successfully.",
+            status: "success",
+            variant: "subtle",
+            position: "top",
+            isClosable: true,
+          });
         });
       })
       .catch((error) => {
@@ -95,13 +105,19 @@ export const FirebaseProvider = ({ children }) => {
   const signupUserWithEmailandPassword = (name, email, password) => {
     setName(name);
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        toast({
-          title: "User Created Successfully.",
-          status: "success",
-          variant: "subtle",
-          position: "top",
-          isClosable: true,
+      .then((userCredential) => {
+        const u = userCredential.user;
+        update(dbRef(db, `users/${u?.uid}`), {
+          name,
+          email,
+        }).then(() => {
+          toast({
+            title: "User Created Successfully.",
+            status: "success",
+            variant: "subtle",
+            position: "top",
+            isClosable: true,
+          });
         });
       })
       .catch((error) => {
@@ -141,12 +157,16 @@ export const FirebaseProvider = ({ children }) => {
       });
   };
 
-  const uploadImage = (image) => {
-    const strgRef = storageRef(storage, 'users/profile photos');
-    uploadBytes(strgRef, image).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
+  const uploadImage = async (image) => {
+    const strgRef = storageRef(storage, `users/${user?.uid}/profile`);
+    uploadBytes(strgRef, image).then(() => {
+      getDownloadURL(storageRef(storage, `users/${user?.uid}/profile`)).then(
+        (url) => {
+          update(dbRef(db, `users/${user?.uid}`), { profilePic: url });
+        }
+      );
     });
-  }
+  };
 
   const value = {
     signinWithGoogle,
@@ -155,6 +175,7 @@ export const FirebaseProvider = ({ children }) => {
     signinUserWithEmailandPassword,
     user,
     loggedin,
+    uploadImage,
   };
 
   useEffect(() => {
@@ -162,10 +183,6 @@ export const FirebaseProvider = ({ children }) => {
       if (user) {
         setUser(user);
         setLoggedin(true);
-        set(dbRef(db, `users/${user?.uid}`), {
-          name: name || user?.displayName,
-          email: user?.email,
-        });
       } else {
         setUser(null);
         setLoggedin(false);

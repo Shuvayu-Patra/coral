@@ -13,15 +13,34 @@ import { onValue, ref, update } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { capitalizeFirstLetter, db, useFirebase } from "../Context/Firebase";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Account() {
   const [name, setName] = useState("");
   const [changedName, setChangedName] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
   const [email, setEmail] = useState("");
   const user = useFirebase().user;
   const [rename, setRename] = useState(false);
+  const navigate = useNavigate();
+  
+
+  const firebase = useFirebase()
+
+  const fileUploadRef = useRef();
 
   const toast = useToast();
+
+  const handleFileUpload = async () => {
+    fileUploadRef.current.click();
+    fileUploadRef.current.onchange = async () => {
+      const file = fileUploadRef.current.files[0];
+      console.log(file);
+      await firebase.uploadImage(file)
+      
+    };
+  };
 
   const HandleSaveClick = () => {
     update(ref(db, `users/${user?.uid}`), { name: changedName })
@@ -49,20 +68,25 @@ export default function Account() {
   };
 
   useEffect(() => {
+    if(!firebase.loggedin){
+      navigate("/")
+    }
     const getUserData = () => {
       if (user) {
         const dbR = ref(db, `users/${user?.uid}`);
         onValue(dbR, (snapshot) => {
-          console.log(snapshot?.val());
           const data = snapshot?.val() || {};
+          console.log(data);
           setName(data.name);
           setChangedName(data.name);
           setEmail(data.email);
+          setProfilePic(data.profilePic)
+          // console.log(data.profilePic)
         });
       }
     };
     getUserData();
-  }, [user?.uid, user]);
+  }, [user?.uid, user, navigate, firebase.loggedin]);
 
   return (
     <>
@@ -70,8 +94,15 @@ export default function Account() {
         <Stack gap={5} flexDir={["column", "row"]} align={"center"}>
           <Avatar
             size={"2xl"}
-            name="Dan Abrahmov"
-            src="https://bit.ly/dan-abramov"
+            name={name}
+            src={profilePic}
+            onClick={handleFileUpload}
+          />
+          <input
+            hidden
+            type="file"
+            accept="image/png, image/jpeg"
+            ref={fileUploadRef}
           />
           {rename ? (
             <>
